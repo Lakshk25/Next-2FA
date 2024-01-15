@@ -4,11 +4,33 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { useForm } from 'react-hook-form'
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { RegisterSchema } from '@/Schemas';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { register } from '@/actions/register';
+import { FormSuccess } from './form-success';
+import { FormError } from './form-error';
 
 const RegisterForm = () => {
-    const form = useForm();
-    const onSubmit = () => {
-
+    const [error, setError] = useState<string | undefined>("");
+    const [success, setSuccess] = useState<string | undefined>("");
+    const form = useForm<z.infer<typeof RegisterSchema>>({
+        resolver: zodResolver(RegisterSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            password: "",
+        }
+    });
+    const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
+        setError("");
+        setSuccess("");
+        register(values)
+            .then((data) => {
+                setSuccess(data.success);
+                setError(data.error);
+            })
     }
     return (
         <CardWrapper
@@ -22,28 +44,43 @@ const RegisterForm = () => {
                     <div className='space-y-6'>
                         <FormField
                             control={form.control}
-                            name="username"
+                            name="name"
                             render={({ field }) => (
                                 <FormItem className='space-y-4'>
                                     <FormControl>
-                                        <Input placeholder="Enter your name" {...field} />
+                                        <Input type='name' placeholder="Enter your name" {...field} />
                                     </FormControl>
                                     <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem className='space-y-4'>
                                     <FormControl>
-                                        <Input placeholder="Enter your email" {...field} />
+                                        <Input type='email' placeholder="Enter your email" {...field} />
                                     </FormControl>
                                     <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem className='space-y-4'>
                                     <FormControl>
-                                        <Input placeholder="Enter your password" {...field} />
-                                    </FormControl>
-                                    <FormControl>
-                                        <Input placeholder="Confirm your password" {...field} />
+                                        <Input type='password' placeholder="Enter your password" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
                     </div>
+                    <FormSuccess message={success}/>
+                    <FormError message={error}/>
                     <Button type="submit" className='w-full'>Sign up</Button>
                 </form>
             </Form>
