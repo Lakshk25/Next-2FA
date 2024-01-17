@@ -29,6 +29,7 @@ const NewVerificationForm = () => {
             setError(data.error);
         })
         .catch((error) => {
+            setError("Something went wrong");
             console.log("Something went wrong");
         })
     }
