@@ -3,18 +3,18 @@
 import { LoginSchema } from "@/Schemas";
 import { getUserByEmail } from "@/data/user";
 import { z } from "zod";
-import  bcrypt  from 'bcryptjs'
+import { AuthError } from "next-auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { signIn } from "@/auth";
 
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
     const validatedFields = LoginSchema.safeParse(values);
 
-    if (!validatedFields) {
+    if (!validatedFields.success) {
         return { error: "Invalid fields" };
     }
-    if (!validatedFields.success) {
-        return null;
-    }
+
     const { email, password } = validatedFields.data;
     const existingUser = await getUserByEmail(email);
 
@@ -22,10 +22,22 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         return { error: "Email not found" };
     }
 
-    const passwordMatch = await bcrypt.compare(password, existingUser.password);
-    if(!passwordMatch){
-        return {error: "Invalid password"};
+    try {
+        await signIn("credentials", {
+            email,
+            password,
+            redirectTo: DEFAULT_LOGIN_REDIRECT
+        });
+    } catch (error) {
+        if (error instanceof AuthError) {
+            switch (error.type) {
+                case "CredentialsSignin":
+                    return { error: "Invalid credentials" };
+                default:
+                    return { error: "Something went wrong!" };
+            }
+        }
+        throw error;
     }
-
-    return { success: "confirmation email sent!" };
+    return {success: "Confirmation sent"};
 }

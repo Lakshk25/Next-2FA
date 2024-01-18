@@ -22,7 +22,7 @@ export const newVerification = async (token: string) => {
     if(!existingUser){
         return {error: "Email not found"};
     }
-
+    
     await db.user.update({
         where: {id: existingUser.id},
         data: {

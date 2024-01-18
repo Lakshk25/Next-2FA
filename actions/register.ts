@@ -18,6 +18,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     const {name, email, password} = validatedFields.data;
 
     const hashPassword = await bcrypt.hash(password, 10);
+    console.log("password " , hashPassword);
 
     const existingUser = await getUserByEmail(email);
 

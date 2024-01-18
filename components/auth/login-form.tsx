@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { login } from '@/actions/login';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { FormSuccess } from './form-success';
 import { FormError } from './form-error';
 import { LoginSchema } from '@/Schemas';
@@ -14,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 
 const LoginForm = () => {
+    const [isPending, startTransition] = useTransition();
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
     const form = useForm<z.infer<typeof LoginSchema>>({
@@ -24,15 +25,17 @@ const LoginForm = () => {
         }
     });
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-        login(values)
-        .then((data) => {
-            if(data.success)
-                setSuccess(data.success);
-                setError("");
-            if(data.error){
-                setError(data.error);
-                setSuccess("");
-            }
+        startTransition(() => {
+            login(values)
+            .then((data) => {
+                if(data?.success)
+                    setSuccess(data?.success);
+                    setError("");
+                if(data?.error){
+                    setError(data?.error);
+                    setSuccess("");
+                }
+            })
         })
     }
     return (
@@ -51,7 +54,7 @@ const LoginForm = () => {
                             render={({ field }) => (
                                 <FormItem className='space-y-4'>
                                     <FormControl>
-                                        <Input type='email' placeholder="Enter your email" {...field} />
+                                        <Input type='email' placeholder="Enter your email" {...field} disabled={isPending}/>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -63,7 +66,7 @@ const LoginForm = () => {
                             render={({ field }) => (
                                 <FormItem className='space-y-4'>
                                     <FormControl>
-                                        <Input type='password' placeholder="Enter your password" {...field} />
+                                        <Input type='password' placeholder="Enter your password" {...field} disabled={isPending}/>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -72,7 +75,7 @@ const LoginForm = () => {
                     </div>
                     <FormSuccess message={success}/>
                     <FormError message={error}/>
-                    <Button type="submit" className='w-full'>Login</Button>
+                    <Button type="submit" className='w-full' disabled={isPending}>Login</Button>
                 </form>
             </Form>
 
