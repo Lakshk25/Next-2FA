@@ -7,10 +7,11 @@ import { signIn } from 'next-auth/react';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 
 const Socials = () => {
+
     const onClick = (provider: "google" | "github") => {
-        signIn(provider, {
-            callbackUrl: DEFAULT_LOGIN_REDIRECT,
-        })
+            signIn(provider, {
+                callbackUrl: DEFAULT_LOGIN_REDIRECT,
+            })
     }
     return (
         <div className='flex w-full items-center gap-x-2 '>
@@ -20,7 +21,6 @@ const Socials = () => {
             <Button size="lg" className='w-full' variant="outline" onClick={() => onClick("github")}>
                 <FaGithub className='h-7 w-7' />
             </Button>
-
         </div>
     )
 }

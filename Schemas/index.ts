@@ -8,7 +8,8 @@ export const LoginSchema = z.object({
         message: " minimum 6 character password is required"
     }).max(50, {
         message: "maximum 50 characters"
-    })
+    }),
+    code: z.optional(z.string())
 })
 
 export  const RegisterSchema = z.object({

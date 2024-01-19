@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import CardWrapper from './card-wrapper'
 import { FormSuccess } from './form-success'
 import { FormError } from './form-error'
 import { BeatLoader } from 'react-spinners'
-import { useSearchParams } from 'next/navigation'
+import { redirect, useSearchParams } from 'next/navigation'
 import { newVerification } from '@/actions/new-verification'
 
 const NewVerificationForm = () => {
@@ -14,8 +14,8 @@ const NewVerificationForm = () => {
     const searchParams = useSearchParams();
 
     const token = searchParams.get('token');
-
-    const onSubmit = () => {
+    console.log(token);
+    const onSubmit = useCallback(() => {
         if(success || error) return;
 
         if(!token){
@@ -27,16 +27,19 @@ const NewVerificationForm = () => {
         .then((data) => {
             setSuccess(data.success);
             setError(data.error);
+            if(data.success){
+                redirect('/auth/login');
+            }
         })
         .catch((error) => {
             setError("Something went wrong");
             console.log("Something went wrong");
         })
-    }
+    },[token, success, error])
 
     useEffect(() => {
         onSubmit();
-    }, [onSubmit]);
+    }, [onSubmit, success, token]);
 
     return (
         <CardWrapper

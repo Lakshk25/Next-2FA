@@ -88,7 +88,6 @@ const RegisterForm = () => {
                     <Button type="submit" className='w-full' disabled={isPending}>Sign up</Button>
                 </form>
             </Form>
-
         </CardWrapper>
     )
 }

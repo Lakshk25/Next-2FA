@@ -15,11 +15,31 @@ export const {
   signIn,
   signOut
 } = NextAuth({
+  // set custom pages otherwise next uses their own prebuilt pages for this
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/error"
+  },
+  // if user use OAuth provider dont do email verification their email is already verified by OAuth provider
+  events: {
+    async linkAccount({ user }){
+      await db.user.update({
+        where: {id: user.id},
+        data: { emailVerified: new Date() }
+      });
+    }
+  },
   callbacks: {
     async signIn({ user, account }){
-      if(account?.provider){
-        console.log("PROVIDER -> ", account);
-      }
+      
+      // allow OAuth without email verification
+      if(account?.provider !== 'credentials') return true;
+
+      const existingUser = await getUserById(user.id);
+
+      // prevent signIn without email verification
+      if(!existingUser?.emailVerified)  return false;
+
       return true;
     },
     async session({ token, session }) {
@@ -47,6 +67,7 @@ export const {
       return token;
     },
   },
+  // we use prisma ORM so change session to jwt
     adapter: PrismaAdapter(db),
   session: { strategy: "jwt", },
   ...authConfig,

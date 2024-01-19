@@ -18,7 +18,6 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     const {name, email, password} = validatedFields.data;
 
     const hashPassword = await bcrypt.hash(password, 10);
-    console.log("password " , hashPassword);
 
     const existingUser = await getUserByEmail(email);
 
@@ -34,7 +33,6 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     })
 
     const verificationToken = await generateVerificationToken(email);
-    const confirmLink = await sendVerificationEmail(verificationToken.email, verificationToken.token);
-    return {success: confirmLink};
-    // return {success: 'account created'};
+    await sendVerificationEmail(verificationToken.email, verificationToken.token);
+    return {success: 'Confirmation email sent!'};
 }
