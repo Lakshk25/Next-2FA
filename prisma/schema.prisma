@@ -1,6 +1,10 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// npx prisma generate
+// npx prisma db push
+// npx prisma studio
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -44,8 +48,11 @@ model User {
   password      String?
   role          UserRole @default(USER)
   accounts      Account[]
+  isTwoFactorEnabled  Boolean @default(true)
+  twoFactorConfirmation   TwoFactorConfirmation?
 }
 
+// to verify user email at registration time
 model VerificationToken {
   id        String @id @default(cuid())
   email     String
@@ -55,6 +62,7 @@ model VerificationToken {
   @@unique([email, token])
 }
 
+// to reset password
 model PasswordResetToken {
   id    String @id @default(cuid())
   email   String
@@ -62,4 +70,22 @@ model PasswordResetToken {
   expires DateTime
 
   @@unique([email, token])
+}
+
+// 2FA token
+model TwoFactorToken{
+  id    String @id @default(cuid())
+  email   String
+  token   String
+  expires   DateTime
+
+  @@unique([email, token])
+}
+
+// to track user who enabled 2 factor confirmation
+model TwoFactorConfirmation{
+  id    String @id @default(cuid())
+  userId    String
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)// also delete this when user deleted
+  @@unique([userId])
 }

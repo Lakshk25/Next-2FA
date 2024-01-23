@@ -27,7 +27,6 @@ export default {
       async authorize(credentials) {
         // dual safe parse credentials to prevent user to directly use server (user should only POST request credentials from client and not from like postman)
         const validatedFields = LoginSchema.safeParse(credentials);
-        console.log('inside');
         if (validatedFields.success) {
           const { email, password } = validatedFields.data;
 

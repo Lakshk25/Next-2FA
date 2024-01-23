@@ -36,7 +36,8 @@ const LoginForm = () => {
     const hideMessage = async () => {
         setTimeout(() => {
             setError("");
-        }, 5000);
+            setSuccess("");
+        }, 10000);
     }
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
         setError("");
@@ -47,10 +48,11 @@ const LoginForm = () => {
                 .then((data) => {
                     if (data?.success)
                         setSuccess(data?.success);
-                    setError("");
                     if (data?.error) {
                         setError(data?.error);
-                        setSuccess("");
+                    }
+                    if(data?.twoFactor){
+                        setShowTwoFactor(true);
                     }
                 })
         })
