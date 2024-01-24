@@ -15,8 +15,10 @@ import bcrypt from 'bcryptjs'
 
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
+    // this returns object {success , data} success is boolean
     const validatedFields = LoginSchema.safeParse(values);
 
+    // if success is false
     if (!validatedFields.success) {
         return { error: "Invalid fields" };
     }
@@ -24,6 +26,8 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     const { email, password, code } = validatedFields.data;
     const existingUser = await getUserByEmail(email);
 
+    // if user use OAuth and tries to login with OAuth email return email not found
+    // because OAuth registration don't have password field
     if(!existingUser || !existingUser.email || !existingUser.password){
         return { error: "Email not found" };
     }
@@ -34,7 +38,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         return {error: "Invalid password"};
     }
 
-    // send confirmation token on email to verify
+    // send confirmation token on email to verify (if user email is not verified earlier)
     if(!existingUser.emailVerified){
         const verificationToken = await generateVerificationToken(existingUser.email);
         await sendVerificationEmail(verificationToken.email, verificationToken.token);
@@ -45,8 +49,6 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     if(existingUser.isTwoFactorEnabled && existingUser.email){
         if(code){
             const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
-
-            if(existingUser.password !== password)
 
             if(!twoFactorToken || twoFactorToken === null){
                 return {error: "Invalid code!"};
@@ -83,12 +85,14 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
                 }
             });
         }else{
+            // if no code exist generate and send code to email
             const twoFactorToken = await generateTwoFactorToken(existingUser.email);
             await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
             return {twoFactor: true};
         }
     }
 
+    // nextjs signIn function to set sesssion and authenticate user (serverless)
     try {
         await signIn("credentials", {
             email,
@@ -96,10 +100,12 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
             redirectTo: DEFAULT_LOGIN_REDIRECT
         });
     } catch (error) {
+        // errors related to authentication
         if (error instanceof AuthError) {
             switch (error.type) {
                 case "CredentialsSignin":
                     return { error: "Invalid credentials" };
+                // if user email is not verify at registration time
                 case "AuthorizedCallbackError":
                     return {error: "First confirm your email"};
                 default:

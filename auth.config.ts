@@ -8,8 +8,8 @@ import Github from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
 
 /*
-  we use prisma so if we define callbacks in this files callbacks got to middleware check and it break the app ORM not supported
-  to handle this I define callbacks in auth.ts
+  we use prisma so if we define callbacks in this files callbacks go to middleware check and it break the app ORM not supported
+  to handle this we define callbacks in auth.ts (next docs)
 */
 
 export default {

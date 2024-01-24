@@ -18,10 +18,11 @@ export default async function RootLayout({
 }) {
   const session = await auth();
   return (
-    // <SessionProvider session={session}>
+    // now we can user session on every page (we can also enable session for specific pages also in their layout)
+    <SessionProvider session={session}>
     <html lang="en">
       <body className={inter.className}>{children}</body>
     </html>
-    // </SessionProvider>
+    </SessionProvider>
   )
 }

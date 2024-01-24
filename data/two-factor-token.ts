@@ -1,17 +1,6 @@
 import { db } from "@/lib/db";
 
-export const getTwoFactorToken = async (token: string) => {
-    try{
-        const twoFactorToken = await db.twoFactorToken.findUnique({
-            where: {token}
-        });
-        console.log(twoFactorToken);
-        return twoFactorToken;
-    }catch(error){
-        return null;
-    }
-}
-
+// check token exist in DB or not with current email
 export const getTwoFactorTokenByEmail = async (email: string) => {
     try{
         const twoFactorToken = await db.twoFactorToken.findFirst({

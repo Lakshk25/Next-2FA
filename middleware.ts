@@ -4,6 +4,8 @@ import { DEFAULT_LOGIN_REDIRECT, apiAuthPrefix, authRoutes, publicRoutes } from 
 
 const { auth } = NextAuth(authConfig);
 
+// return null means that route is allowed
+
 export default auth((req) => {
     const { nextUrl } = req;
     const isLoggedIn = !!req.auth;
@@ -12,7 +14,7 @@ export default auth((req) => {
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-    // if not logged in user access auth routes
+    // if user is not logged in , they can access this routes
     if(isApiAuthRoute){
         return null;
     }
@@ -34,7 +36,7 @@ export default auth((req) => {
     return null;
 })
 
-// runs middleware for all paths
+// runs middleware for all paths 
 export const config = {
-    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],       // clerk docs middleware
 }
