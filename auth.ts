@@ -7,6 +7,7 @@ import authConfig from "./auth.config"
 import { getUserById } from "./data/user"
 import { UserRole } from "@prisma/client"
 import { getAccountByUserId } from "./data/account"
+import { getTwoFactorConfirmationByUserId } from "./data/two-factor-confirmation"
 
 // for ORM like prisma we need to change session from database to jwt (authjs Edge compatibility)
 
@@ -14,7 +15,8 @@ export const {
   handlers: { GET, POST },
   auth,
   signIn,
-  signOut
+  signOut,
+  update
 } = NextAuth({
   // set custom pages otherwise next uses their own prebuilt pages for this
   pages: {
@@ -41,6 +43,17 @@ export const {
       // prevent signIn without email verification
       if(!existingUser?.emailVerified)  return false;
 
+      if(existingUser.isTwoFactorEnabled){
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(existingUser.id);
+
+        if(!twoFactorConfirmation) return false;
+
+        // delete two factor confirmation for next sign in
+
+        await db.twoFactorConfirmation.delete({
+          where: {id: twoFactorConfirmation.id}
+        });
+      }
       return true;
     },
     //  session works when jwt is defined
@@ -68,7 +81,7 @@ export const {
       return session;
     },
     // first jwt runs then session runs
-    async jwt({ token, user, profile }) {
+    async jwt({ token}) {
       // if no sub (id ) means no user is logged in currently
       if(!token.sub) return token;
 
