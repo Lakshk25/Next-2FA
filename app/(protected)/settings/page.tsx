@@ -61,7 +61,7 @@ const SettingsPage = () => {
     setTimeout(() => {
         setError("");
         setSuccess("");
-    }, 7000);
+    }, 10000);
 }
 
   const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
