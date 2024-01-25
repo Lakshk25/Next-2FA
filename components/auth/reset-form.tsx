@@ -31,12 +31,10 @@ export const ResetForm = () => {
         setError("");
         setSuccess("");
 
-        console.log(values)
         startTransition(() => {
             reset(values)
                 .then((data) => {
                     setError(data?.error);
-                    // TODO:: Add when we add 2FA
                     setSuccess(data?.success);
                 });
         });

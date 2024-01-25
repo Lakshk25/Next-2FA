@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 
 
 const AdminPage = () => {
+    // server actions
     const onServerActionClick = () => {
         admin()
         .then((data) => {
@@ -24,13 +25,14 @@ const AdminPage = () => {
         })
         
     }
+    // api routes
     const onApiRouteClick = () => {
         fetch('/api/admin')
             .then((response) => {
                 if (response.ok) {
                     toast.success("Allowed API Route");
                 } else {
-                    toast.success("Forbidden API Route")
+                    toast.error("Forbidden API Route")
                 }
             })
     }

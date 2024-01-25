@@ -6,6 +6,8 @@ import { sendPasswordResetEmail } from "@/lib/mail";
 import { generatePasswordResetToken } from "@/lib/tokens";
 import { z } from "zod";
 
+
+// this action is for password reset to generate token and send password reset link on email
 export const reset = async(values: z.infer<typeof ResetSchema>) => {
     const validatedFields = ResetSchema.safeParse(values);
 

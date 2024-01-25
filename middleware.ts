@@ -29,7 +29,15 @@ export default auth((req) => {
 
     // if not logged in protect (isAuthRoute) and return them to login page
     if(!isLoggedIn && !isPublicRoute){
-        return Response.redirect(new URL("/auth/login", nextUrl))
+        let callbackUrl = nextUrl.pathname;
+
+        // user redirected to their last visited page before log out
+        if(nextUrl.search){
+            callbackUrl += nextUrl.search;
+        }
+        const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+
+        return Response.redirect(new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl))
     }
 
     // else on other routes allow them

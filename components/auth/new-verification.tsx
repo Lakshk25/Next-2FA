@@ -14,7 +14,6 @@ const NewVerificationForm = () => {
     const searchParams = useSearchParams();
 
     const token = searchParams.get('token');
-    console.log(token);
     const onSubmit = useCallback(() => {
         if(success || error) return;
 
@@ -33,7 +32,6 @@ const NewVerificationForm = () => {
         })
         .catch((error) => {
             setError("Something went wrong");
-            console.log("Something went wrong");
         })
     },[token, success, error])
 
