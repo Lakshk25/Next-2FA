@@ -36,6 +36,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";
 import { UserRole } from "@prisma/client";
+import DeleteAccount from "@/components/delete-account-button";
 
 const SettingsPage = () => {
   const user = useCurrentUser();
@@ -59,10 +60,10 @@ const SettingsPage = () => {
 
   const hideMessage = async () => {
     setTimeout(() => {
-        setError("");
-        setSuccess("");
+      setError("");
+      setSuccess("");
     }, 10000);
-}
+  }
 
   const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
     setError("");
@@ -80,11 +81,11 @@ const SettingsPage = () => {
           }
         })
         .catch(() => setError("Something went wrong!"));
-        hideMessage();
+      hideMessage();
     });
   }
 
-  return ( 
+  return (
     <Card className="w-[600px]">
       <CardHeader>
         <p className="text-2xl font-semibold text-center">
@@ -93,8 +94,8 @@ const SettingsPage = () => {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form 
-            className="space-y-2" 
+          <form
+            className="space-y-2"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <div className="space-y-2">
@@ -228,17 +229,22 @@ const SettingsPage = () => {
             </div>
             <FormError message={error} />
             <FormSuccess message={success} />
-            <Button
-              disabled={isPending}
-              type="submit"
-            >
-              Save
-            </Button>
+            <div className="flex justify-between">
+              <DeleteAccount>
+              <Button type="button" variant="destructive">delete account</Button>
+              </DeleteAccount>
+              <Button
+                disabled={isPending}
+                type="submit"
+              >
+                Save
+              </Button>
+            </div>
           </form>
         </Form>
       </CardContent>
     </Card>
-   );
+  );
 }
- 
+
 export default SettingsPage;

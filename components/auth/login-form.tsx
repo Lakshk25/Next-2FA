@@ -19,7 +19,6 @@ const LoginForm = () => {
     const searchParams = useSearchParams();
     // if email is linked by Another OAuth provider show error
     const callbackUrl = searchParams.get("callbackUrl");
-    console.log(callbackUrl)
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email already in use with different provider!" : "";
     const [isPending, startTransition] = useTransition();
     const [success, setSuccess] = useState("");
