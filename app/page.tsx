@@ -14,7 +14,7 @@ export default function Home() {
       <div className='text-white text-center space-y-4'>
         <h1 className={cn("text-6xl font-semibold text-white drop-shadow-md", font.className)}>🔐Auth</h1>
         <div>Login to access dashboard</div>
-        <LoginButton mode="redirect" asChild>
+        <LoginButton mode='modal' asChild>
           <Button size="lg" variant="secondary">
             Login
           </Button>
