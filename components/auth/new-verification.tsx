@@ -1,5 +1,6 @@
 "use client";
 
+// verification component which check 6 digit code sent to email
 import React, { useCallback, useEffect, useState } from 'react'
 import CardWrapper from './card-wrapper'
 import { FormSuccess } from './form-success'
@@ -11,29 +12,30 @@ import { newVerification } from '@/actions/new-verification'
 const NewVerificationForm = () => {
     const [error, setError] = useState<string | undefined>();
     const [success, setSuccess] = useState<string | undefined>();
-    const searchParams = useSearchParams();
 
+    // check token in valid url
+    const searchParams = useSearchParams();
     const token = searchParams.get('token');
     const onSubmit = useCallback(() => {
-        if(success || error) return;
+        if (success || error) return;
 
-        if(!token){
+        if (!token) {
             setError("Missing token");
             return;
         };
 
         newVerification(token)
-        .then((data) => {
-            setSuccess(data.success);
-            setError(data.error);
-            if(data.success){
-                redirect('/auth/login');
-            }
-        })
-        .catch((error) => {
-            setError("Something went wrong");
-        })
-    },[token, success, error])
+            .then((data) => {
+                setSuccess(data.success);
+                setError(data.error);
+                if (data.success) {
+                    redirect('/auth/login');
+                }
+            })
+            .catch((error) => {
+                setError("Something went wrong");
+            })
+    }, [token, success, error])
 
     useEffect(() => {
         onSubmit();

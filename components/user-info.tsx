@@ -2,6 +2,7 @@ import { ExtendedUser } from "@/next-auth";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
 
+// user info component which showed on client and server component
 interface UserInfoProps {
     user?: ExtendedUser;
     label: string;

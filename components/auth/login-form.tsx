@@ -14,10 +14,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-
 const LoginForm = () => {
     const searchParams = useSearchParams();
-    // if email is linked by Another OAuth provider show error
+    // if email is linked by Another OAuth provider show error (params => "OAuthAccountNotLinked")
     const callbackUrl = searchParams.get("callbackUrl");
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email already in use with different provider!" : "";
     const [isPending, startTransition] = useTransition();
@@ -34,28 +33,30 @@ const LoginForm = () => {
         }
     });
 
+    // hide any success or error message after 10 sec
     const hideMessage = async () => {
         setTimeout(() => {
             setError("");
             setSuccess("");
         }, 10000);
     }
+
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
         setError("");
         setSuccess("");
         startTransition(() => {
             login(values, callbackUrl)
-            .then((data) => {
-                if (data?.success)
-                setSuccess(data?.success);
-            if (data?.error) {
-                setError(data?.error);
-            }
-            if (data?.twoFactor) {
-                setShowTwoFactor(true);
-            }
-        })
-        hideMessage();
+                .then((data) => {
+                    if (data?.success)
+                        setSuccess(data?.success);
+                    if (data?.error) {
+                        setError(data?.error);
+                    }
+                    if (data?.twoFactor) {
+                        setShowTwoFactor(true);
+                    }
+                })
+            hideMessage();
         })
     }
     return (
@@ -66,6 +67,7 @@ const LoginForm = () => {
             showSocial>
 
             <Form {...form}>
+                {/* if two factor enabled */}
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-4">
                         {showTwoFactor && (
@@ -79,6 +81,7 @@ const LoginForm = () => {
                                 </FormItem>
                             )} />
                         )}
+                        {/* login page */}
                         {!showTwoFactor &&
                             (<>
                                 <FormField control={form.control} name="email" render={({ field }) => (

@@ -14,16 +14,16 @@ export const RoleGate = ({
     allowedRole,
 }: RoleGateProps) => {
     const role = useCurrentRole();
-
-    if(role !== allowedRole){
-        return(
-            <FormError message="You do not have permission to view this content"/>
+    // if user is not admin show error on admin routes
+    if (role !== allowedRole) {
+        return (
+            <FormError message="You do not have permission to view this content" />
         )
     }
 
     return (
         <>
-        {children}
+            {children}
         </>
     )
 }

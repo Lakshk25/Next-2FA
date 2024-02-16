@@ -13,7 +13,6 @@ import { db } from "@/lib/db";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 import bcrypt from 'bcryptjs'
 
-
 export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: string | null) => {
     // this returns object {success , data} success is boolean
     const validatedFields = LoginSchema.safeParse(values);

@@ -1,5 +1,6 @@
 
-
+// authentication layout 
+// routes => "/auth/..."
 const AuthLayout = ({
     children
 }: { children: React.ReactNode }) => {

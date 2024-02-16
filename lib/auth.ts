@@ -1,6 +1,6 @@
-
 import { auth } from "@/auth"
 
+// session from server side
 // return user from current session (logged in)
 export const currentUser = async () => {
     const session = await auth();

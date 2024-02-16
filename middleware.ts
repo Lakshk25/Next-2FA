@@ -15,24 +15,24 @@ export default auth((req) => {
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
     // if user is not logged in , they can access this routes
-    if(isApiAuthRoute){
+    if (isApiAuthRoute) {
         return null;
     }
 
-    if(isAuthRoute){
+    if (isAuthRoute) {
         // if logged in prevent user to go on login and signup page
-        if(isLoggedIn){
+        if (isLoggedIn) {
             return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
         }
         return null;
     }
 
     // if not logged in protect (isAuthRoute) and return them to login page
-    if(!isLoggedIn && !isPublicRoute){
+    if (!isLoggedIn && !isPublicRoute) {
         let callbackUrl = nextUrl.pathname;
 
         // user redirected to their last visited page before log out
-        if(nextUrl.search){
+        if (nextUrl.search) {
             callbackUrl += nextUrl.search;
         }
         const encodedCallbackUrl = encodeURIComponent(callbackUrl);

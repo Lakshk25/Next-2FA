@@ -1,5 +1,6 @@
 "use client";
 
+// user's forget password form
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from 'zod'
 import { useForm } from "react-hook-form"
@@ -14,11 +15,8 @@ import CardWrapper from "./card-wrapper";
 import { FormError } from "./form-error";
 import { FormSuccess } from "./form-success";
 
-
-
-
-
 export const NewPasswordForm = () => {
+    // only works if user redirected from their email link and with valid token
     const searchParams = useSearchParams();
     const token = searchParams.get('token');
 
@@ -40,7 +38,6 @@ export const NewPasswordForm = () => {
             newPassword(values, token)
                 .then((data) => {
                     setError(data?.error);
-                    // TODO:: Add when we add 2FA
                     setSuccess(data?.success);
                 });
         });

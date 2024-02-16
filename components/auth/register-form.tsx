@@ -16,6 +16,7 @@ const RegisterForm = () => {
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
+
     const form = useForm<z.infer<typeof RegisterSchema>>({
         resolver: zodResolver(RegisterSchema),
         defaultValues: {
@@ -24,6 +25,7 @@ const RegisterForm = () => {
             password: "",
         }
     });
+
     const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
         setError("");
         setSuccess("");
@@ -35,6 +37,7 @@ const RegisterForm = () => {
                 })
         })
     }
+
     return (
         <CardWrapper
             headerLabel='Create an account'
@@ -76,7 +79,7 @@ const RegisterForm = () => {
                             render={({ field }) => (
                                 <FormItem className='space-y-4'>
                                     <FormControl>
-                                        <Input {...field} disabled={isPending} type='password' placeholder="Enter your password"  />
+                                        <Input {...field} disabled={isPending} type='password' placeholder="Enter your password" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

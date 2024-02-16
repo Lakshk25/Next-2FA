@@ -8,6 +8,7 @@ const font = Poppins({
   weight: ["600"]
 })
 
+// route "/"
 export default function Home() {
   return (
     <main className="flex h-full space-y-5 flex-col items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">

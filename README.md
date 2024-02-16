@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AuthShield
+
+AuthShield is a robust authentication system built with Next.js, Auth0, Prisma, Tailwind CSS, TypeScript, Shadcn, Resend, React, and Zod. It provides seamless user authentication, including options for social login via Google and GitHub OAuth providers, as well as traditional email registration with email verification. Additionally, AuthShield supports two-factor authentication for enhanced security.
+
+## Features
+
+- **Social Login**: Users can sign in using their Google or GitHub accounts via OAuth providers.
+- **Email Registration**: Users can create accounts using their email addresses. Upon registration, an email verification link is sent to the user's email for account activation.
+- **Email Verification**: AuthShield ensures account security by requiring users to verify their email addresses. This helps prevent unauthorized access and ensures the integrity of user accounts.
+- **Two-Factor Authentication (2FA)**: Users can enable two-factor authentication for an extra layer of security. A 6-digit verification code is sent to the user's email for authentication during login.
+
+## Tech Stack
+
+- **Next.js**: A React framework for building server-side rendered and statically generated web applications.
+- **Auth0**: A flexible authentication and authorization platform, used here for managing authentication flows and integrating OAuth providers.
+- **Prisma**: A modern database toolkit for TypeScript and Node.js that simplifies database access with type-safe queries.
+- **Tailwind CSS**: A utility-first CSS framework for building custom designs quickly and without writing custom CSS.
+- **TypeScript**: A statically typed superset of JavaScript that enhances code quality and developer productivity.
+- **Shadcn**: (Could not find any specific information on this library, assuming it's a custom or internal library. Please update with accurate information.)
+- **Resend**: (Could not find any specific information on this library, assuming it's a custom or internal library. Please update with accurate information.)
+- **React**: A JavaScript library for building user interfaces.
+- **Zod**: A TypeScript-first schema declaration and validation library, used here for data validation.
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the repository**:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```bash
+   git clone <repository-url>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. **Install dependencies:**:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+   ```bash
+   npm install
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+3. **Install dependencies:**:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   npm run dev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# Environment Variables
 
-## Deploy on Vercel
+To run the AuthShield project, you need to set up the following environment variables:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `DATABASE_URL`: Connection URL for your PostgreSQL database.
+- `AUTH_SECRET`: Secret key used for authentication.
+- `GITHUB_CLIENT_ID`: Client ID for GitHub OAuth.
+- `GITHUB_CLIENT_SECRET`: Client secret for GitHub OAuth.
+- `GOOGLE_CLIENT_ID`: Client ID for Google OAuth.
+- `GOOGLE_CLIENT_SECRET`: Client secret for Google OAuth.
+- `RESEND_API_KEY`: API key for Resend service.
+- `NEXT_PUBLIC_URL`: Public URL for your project, typically `http://localhost:3000`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Please replace the placeholder values with your actual credentials before running the project.
+
